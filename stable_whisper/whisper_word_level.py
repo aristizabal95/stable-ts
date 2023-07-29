@@ -63,6 +63,7 @@ def transcribe_stable(
         suppress_ts_tokens: bool = False,
         gap_padding: str = ' ...',
         only_ffmpeg: bool = False,
+        pbar_cls=tqdm,
         **decode_options) \
         -> WhisperResult:
     """
@@ -390,7 +391,7 @@ def transcribe_stable(
     if suppress_silence and vad:
         silence_timing = get_vad_silence_func(onnx=vad_onnx, verbose=verbose)(audio, speech_threshold=vad_threshold)
 
-    with tqdm(total=total_duration, unit='sec', disable=verbose is not False) as tqdm_pbar:
+    with pbar_cls(total=total_duration, unit='sec', disable=verbose is not False) as tqdm_pbar:
 
         def update_pbar():
             nonlocal audio_features
